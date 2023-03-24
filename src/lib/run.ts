@@ -1,5 +1,4 @@
 import { ChildProcess, execFile } from "child_process";
-import { type } from "os";
 import logger from "../utils/logger";
 
 export type FileExtension = "cpp" | "c";
