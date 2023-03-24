@@ -47,6 +47,7 @@ const filepath: string = isAbsolute(filename)
 
 if (existsSync(`${filepath}.${extension}`)) {
   logger.info(`watching path ${filepath}.${extension} for changes`);
+  logger.info(`to restart at any time, enter \`trs\``);
   let controller: AbortController = new AbortController();
 
   runWithGpp(filepath, extension, controller, saveTemps);
