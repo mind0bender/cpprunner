@@ -1,30 +1,25 @@
 import { ChildProcess, execFile } from "child_process";
 import logger from "../utils/logger";
 
-const getExecExtension: () => string = (): string => {
-  const extensions = {
-    win32: ".exe",
-    linux: "",
-  };
-  const { platform } = process;
-  if (platform === "win32" || platform === "linux") {
-    return extensions[platform];
-  }
-  return "";
-};
 
-const runCpp: (cppFilepath: string, controller: AbortController) => void = (
-  cppFilepath: string,
+const runWithGpp: (
+  filepath: string,
+  extension: string,
+  controller: AbortController
+) => void = (
+  filepath: string,
+  extension: string,
   controller: AbortController
 ): void => {
-  const compiler: ChildProcess = execFile(`g++`, [
-    `--std=c++20`,
-    `${cppFilepath}.cpp`,
-    `-o`,
-    cppFilepath,
-  ]);
+  const compileOptions: string[] = [`${filepath}.${extension}`, `-o`, filepath];
+
+  if (extension === "cpp") {
+    compileOptions.push(`--std=c++20`);
+  }
+
+  const compiler: ChildProcess = execFile(`g++`, compileOptions);
   compiler.on("spawn", (): void => {
-    logger.info(`compiling ${cppFilepath}.cpp`);
+    logger.info(`compiling ${filepath}.${extension}`);
   });
   compiler.on("exit", (exitCode: number): void => {
     if (exitCode) {
@@ -32,33 +27,33 @@ const runCpp: (cppFilepath: string, controller: AbortController) => void = (
       return;
     }
     logger.info(`exited with code: ${exitCode}`);
-    const cppProgram: ChildProcess = execFile(cppFilepath);
+    const program: ChildProcess = execFile(filepath);
     const onAbort: () => void = (): void => {
-      cppProgram.kill();
+      program.kill();
     };
     controller.signal.addEventListener("abort", onAbort);
 
-    cppProgram.on("error", (err: Error): void => {
+    program.on("error", (err: Error): void => {
       logger.error(`${err}`);
     });
-    cppProgram.on("spawn", (): void => {
+    program.on("spawn", (): void => {
       console.log();
     });
-    cppProgram.stdout!.on("warn", (warning: any): void => {
+    program.stdout!.on("warn", (warning: any): void => {
       logger.warn(`${warning}`);
     });
-    cppProgram.stdout!.on("data", (data: Object): void => {
+    program.stdout!.on("data", (data: Object): void => {
       console.log(`${data}`);
     });
-    cppProgram.stderr!.on("data", (err: string): void => {
+    program.stderr!.on("data", (err: string): void => {
       logger.error(`${err}`);
     });
-    cppProgram.on("exit", (err: string): void => {
+    program.on("exit", (err: string): void => {
       controller.abort();
     });
     process.stdin.on("data", (data: Buffer): void => {
-      if (cppProgram.stdin) {
-        cppProgram.stdin.write(data);
+      if (program.stdin) {
+        program.stdin.write(data);
       } else {
         logger.error(`Child does not has stdin`);
       }
@@ -72,4 +67,4 @@ const runCpp: (cppFilepath: string, controller: AbortController) => void = (
   });
 };
 
-export default runCpp;
+export default runWithGpp;
