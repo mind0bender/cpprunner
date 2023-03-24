@@ -1,23 +1,42 @@
 import { ChildProcess, execFile } from "child_process";
+import { type } from "os";
 import logger from "../utils/logger";
 
+export type FileExtension = "cpp" | "c";
+export type compilerName = "g++" | "gcc";
 
 const runWithGpp: (
   filepath: string,
-  extension: string,
-  controller: AbortController
+  extension: FileExtension,
+  controller: AbortController,
+  saveTemps: boolean
 ) => void = (
   filepath: string,
   extension: string,
-  controller: AbortController
+  controller: AbortController,
+  saveTemps: boolean
 ): void => {
-  const compileOptions: string[] = [`${filepath}.${extension}`, `-o`, filepath];
+  const compileOptions: string[] = [
+    "-Wall",
+    `${filepath}.${extension}`,
+    `-o`,
+    filepath,
+  ];
+
+  let compilerName: compilerName = "g++";
 
   if (extension === "cpp") {
     compileOptions.push(`--std=c++20`);
+    compilerName = "g++";
+  } else if (extension === "c") {
+    compileOptions.push(`--std=c17`);
+    compilerName = "gcc";
+  }
+  if (saveTemps) {
+    compileOptions.push(`-save-temps`);
   }
 
-  const compiler: ChildProcess = execFile(`g++`, compileOptions);
+  const compiler: ChildProcess = execFile(compilerName, compileOptions);
   compiler.on("spawn", (): void => {
     logger.info(`compiling ${filepath}.${extension}`);
   });
