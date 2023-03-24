@@ -10,7 +10,8 @@ import logger from "./utils/logger";
  * setting NODEMONRUNNER=true in dev script only
  * as (require.main === module) is false for nodemon
  * */
-const NODEMONRUNNER: boolean = process.env.NODEMONRUNNER === "true";
+export const NODEMONRUNNER: boolean = process.env.NODEMONRUNNER === "true";
+export const ISDEV: boolean = require.main === module || NODEMONRUNNER;
 
 /**
  * starts watching the file for changes and recompiles and runs the program
@@ -106,7 +107,7 @@ const main: () => void = (): void => {
   }
 };
 
-if (require.main === module || NODEMONRUNNER) {
+if (ISDEV) {
   main();
 }
 

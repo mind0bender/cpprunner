@@ -11,7 +11,8 @@
     "start": "node dist/index.js",
     "dev": "NODEMONRUNNER=false nodemon --esm src/index.ts",
     "build": "tsc",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "cpprunner": "yarn start"
   },
   "devDependencies": {
     "@types/node": "^18.15.3",
@@ -40,9 +41,7 @@
     "url": "https://github.com/mind0bender/cpprunner/issues"
   },
   "homepage": "https://github.com/mind0bender/cpprunner#readme",
-  "bin": {
-    "cpprunner": "dist/index.ts"
-  },
+  "bin": "./dist/index.js",
   "files": [
     "dist/**/*"
   ]
