@@ -3,9 +3,6 @@
   "description": "watches for changes, compiles and runs C/C++ file.",
   "version": "1.0.1",
   "license": "MIT",
-  "dependencies": {
-    "pino": "^8.11.0"
-  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -15,11 +12,14 @@
     "prepare": "yarn build",
     "cpprunner": "yarn start"
   },
+  "dependencies": {
+    "pino": "^8.11.0",
+    "pino-pretty": "^10.0.0"
+  },
   "devDependencies": {
     "@types/node": "^18.15.3",
     "@types/pino": "^7.0.5",
     "nodemon": "^2.0.21",
-    "pino-pretty": "^10.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   },

@@ -4,14 +4,13 @@ import { isAbsolute, join } from "path";
 import { argv, cwd } from "process";
 import help from "./lib/help";
 import runWithGpp, { FileExtension } from "./lib/run";
+import { ISDEV } from "./utils/constants";
 import logger from "./utils/logger";
 
 /**
  * setting NODEMONRUNNER=true in dev script only
  * as (require.main === module) is false for nodemon
  * */
-export const NODEMONRUNNER: boolean = process.env.NODEMONRUNNER === "true";
-export const ISDEV: boolean = require.main === module || NODEMONRUNNER;
 
 
 /**
