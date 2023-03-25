@@ -1,6 +1,7 @@
 {
   "name": "cpprunner",
-  "version": "1.0.0",
+  "description": "watches for changes, compiles and runs C/C++ file.",
+  "version": "1.0.1",
   "license": "MIT",
   "dependencies": {
     "pino": "^8.11.0"
@@ -9,7 +10,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "NODEMONRUNNER=false nodemon --esm src/index.ts",
+    "dev": "NODEMONRUNNER=true nodemon --esm src/index.ts",
     "build": "tsc",
     "prepare": "yarn build",
     "cpprunner": "yarn start"
@@ -44,5 +45,6 @@
   "bin": "./dist/index.js",
   "files": [
     "dist/**/*"
-  ]
+  ],
+  "packageManager": "yarn@1.22.19"
 }

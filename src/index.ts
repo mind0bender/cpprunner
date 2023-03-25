@@ -13,6 +13,7 @@ import logger from "./utils/logger";
 export const NODEMONRUNNER: boolean = process.env.NODEMONRUNNER === "true";
 export const ISDEV: boolean = require.main === module || NODEMONRUNNER;
 
+
 /**
  * starts watching the file for changes and recompiles and runs the program
  * @param filepath path to the program file excluding the extension
