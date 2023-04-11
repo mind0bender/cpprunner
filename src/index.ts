@@ -1,17 +1,14 @@
 #! /usr/bin/env node
 import { existsSync, watch, WatchEventType } from "fs";
 import { isAbsolute, join } from "path";
-import { argv, cwd } from "process";
-import help from "./lib/help";
+import { cwd, exit } from "process";
+import { help, version } from "./lib/flags";
 import runWithGpp, { FileExtension } from "./lib/run";
 import { ISDEV } from "./utils/constants";
 import logger from "./utils/logger";
+import { cliArgv } from "./utils/cliparser";
 
-/**
- * setting NODEMONRUNNER=true in dev script only
- * as (require.main === module) is false for nodemon
- * */
-
+console.log(cliArgv);
 
 /**
  * starts watching the file for changes and recompiles and runs the program
@@ -60,21 +57,19 @@ const run: (
  * parses the arguments passed and calls the run method
  */
 const main: () => void = (): void => {
-  if (argv.length < 3 || argv.includes("-h")) {
+  if (cliArgv.help) {
     help();
   }
-
-  const validFlags: string[] = ["-st", "-h"];
-
-  for (let i: number = 3; i < argv.length; i++) {
-    const flag: string = argv[i];
-    if (!validFlags.includes(flag)) {
-      logger.error(`Invalid flag: ${flag}`);
-      process.exit(1);
-    }
+  if (cliArgv.version) {
+    version();
   }
 
-  const filenameWExtension: string = argv[2];
+  const filenameWExtension: string = cliArgv.file || cliArgv._[2];
+  if (!filenameWExtension) {
+    console.error(`file is required
+    use \`cpprunner -h\` for more information`);
+    exit(0);
+  }
   let filename: string = filenameWExtension;
   let extension: FileExtension = "c";
   if (filenameWExtension.endsWith(`.cpp`)) {
@@ -85,15 +80,10 @@ const main: () => void = (): void => {
     filename = filenameWExtension.slice(0, -2);
   } else {
     logger.error(`please provide the filename with an extension of c/cpp.`);
-    process.exit(1);
+    exit(1);
   }
 
-  const saveTemps: boolean = argv.includes(`-st`);
-
-  if (!filename) {
-    logger.error("Please specify a filename");
-    process.exit(1);
-  }
+  const saveTemps: boolean = cliArgv.showtemp;
 
   const filepath: string = isAbsolute(filename)
     ? filename
@@ -103,7 +93,7 @@ const main: () => void = (): void => {
     run(filepath, extension, saveTemps);
   } else {
     logger.error(`path ${filepath} does not exists`);
-    process.exit(1);
+    exit(1);
   }
 };
 
