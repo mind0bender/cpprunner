@@ -8,8 +8,6 @@ import { ISDEV } from "./utils/constants";
 import logger from "./utils/logger";
 import { cliArgv } from "./utils/cliparser";
 
-console.log(cliArgv);
-
 /**
  * starts watching the file for changes and recompiles and runs the program
  * @param filepath path to the program file excluding the extension
