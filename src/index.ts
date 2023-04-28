@@ -2,11 +2,12 @@
 import { existsSync, watch, WatchEventType } from "fs";
 import { isAbsolute, join } from "path";
 import { cwd, exit } from "process";
-import { help, version } from "./lib/flags";
-import runWithGpp, { FileExtension } from "./lib/run";
-import { ISDEV } from "./utils/constants";
-import logger from "./utils/logger";
-import { cliArgv } from "./utils/cliparser";
+import { help, version } from "./lib/flags.js";
+import runWithGpp, { FileExtension } from "./lib/run.js";
+import logger from "./utils/logger.js";
+import { cliArgv } from "./utils/cliparser.js";
+import { NODEMONRUNNER } from "./utils/constants.js";
+const ISDEV: boolean = require.main === module || NODEMONRUNNER;
 
 /**
  * starts watching the file for changes and recompiles and runs the program

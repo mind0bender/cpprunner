@@ -1,5 +1,5 @@
 import { join } from "path";
-import { VERSION } from "../utils/constants";
+import { VERSION } from "../utils/constants.js";
 
 export const help: () => void = (): void => {
   const builtIndexFile: string = join(__dirname, "../", "dist", "index.js");

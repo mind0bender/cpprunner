@@ -1,5 +1,5 @@
 import { ChildProcess, execFile } from "child_process";
-import logger from "../utils/logger";
+import logger from "../utils/logger.js";
 
 export type FileExtension = "cpp" | "c";
 export type compilerName = "g++" | "gcc";

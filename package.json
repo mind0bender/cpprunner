@@ -1,9 +1,10 @@
 {
   "name": "cpprunner",
   "description": "watches for changes, compiles and runs C/C++ file.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "main": "dist/index.js",
+  "type": "commonjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "node dist/index.js",
@@ -13,11 +14,13 @@
     "cpprunner": "yarn start"
   },
   "dependencies": {
+    "dotenv": "^16.0.3",
     "minimist": "^1.2.8",
     "pino": "^8.11.0",
     "pino-pretty": "^10.0.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "^18.15.3",
     "@types/pino": "^7.0.5",
